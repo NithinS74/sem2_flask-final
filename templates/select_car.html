@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Car</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='Images/favicon.avif') }}">
-    <title>Car Selection</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -92,37 +92,36 @@
         .dropdown {
             cursor: pointer;
             color: #007bff;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Available Cars for Rent</h1>
+        {% for category, cars in car_categories.items() %}
         <div class="category">
-            <h2>Hatchback</h2>
-            <button class="dropdown" onclick="toggleDropdown('hatchback')">Choose</button>
-            <div id="hatchback" class="subcategory">
+            <h2>{{ category }}</h2>
+            <button class="dropdown" onclick="toggleDropdown('{{ category|replace(' ', '_') }}')">Choose</button>
+            <div id="{{ category|replace(' ', '_') }}" class="subcategory">
+                {% for car in cars %}
                 <div class="car-info">
-                    <h3>i20 Hyundai</h3>
-                    <span class="price">Price: 150 rupees/hr</span>
-                    <button onclick="location.href='{{ url_for('payment', car_id=1) }}'">Rent</button>
+                    <h3>{{ car['brand'] }} {{ car['model'] }}</h3>
+                    <span class="price">Price: ${{ car['price_per_hour'] }} per hour</span>
+                    <button onclick="location.href='{{ url_for('process_payment', car_name=car['brand'] ~ ' ' ~ car['model'], rental_hours=1) }}'">Rent</button>
                 </div>
-                <div class="car-info">
-                    <h3>Sonet Kia</h3>
-                    <span class="price">Price: 180 rupees/hr</span>
-                    <button onclick="location.href='{{ url_for('payment', car_id=2) }}'">Rent</button>
-                </div>
+                {% endfor %}
             </div>
         </div>
-        <!-- Add more categories and cars here -->
+        {% endfor %}
     </div>
     <script>
         function toggleDropdown(subcategoryId) {
             const subcategory = document.getElementById(subcategoryId);
-            if (subcategory.style.display === 'none') {
-                subcategory.style.display = 'block';
-            } else {
+            if (subcategory.style.display === 'block' || subcategory.style.display === '') {
                 subcategory.style.display = 'none';
+            } else {
+                subcategory.style.display = 'block';
             }
         }
     </script>
