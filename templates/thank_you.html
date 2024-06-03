@@ -6,10 +6,11 @@
     <title>Thank You</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f9ff;
             margin: 0;
             padding: 0;
+            color: #333;
         }
 
         h1 {
@@ -17,10 +18,22 @@
             margin-top: 30px;
             margin-bottom: 20px;
             color: #007bff;
+            font-size: 2.5em;
         }
 
         p {
             text-align: center;
+            font-size: 1.2em;
+            margin: 20px auto;
+        }
+
+        p::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 2px;
+            background-color: #007bff;
+            margin: 20px auto;
         }
     </style>
 </head>
