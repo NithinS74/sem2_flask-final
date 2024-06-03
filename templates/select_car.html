@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Car</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='Images/favicon.avif') }}">
+    <title>Car Selection</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -13,156 +14,117 @@
             color: #333;
         }
 
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
         h1 {
             text-align: center;
-            margin-top: 30px;
+            color: #007bff;
+            margin-bottom: 25px;
+        }
+
+        .category {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 15px;
+        }
+
+        .category:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .subcategory {
             margin-bottom: 10px;
-            color: #0056b3;
-            font-size: 2.5em;
+            padding-left: 20px;
+            display: none;
         }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #004085;
-        }
-
-        form {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #004085;
-        }
-
-        select,
-        input[type="number"],
-        input[type="submit"] {
-            width: calc(100% - 20px);
+        .car-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 10px;
-            margin: 10px 0 20px 0;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 1em;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease;
         }
 
-        select:focus,
-        input[type="number"]:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-            outline: none;
+        .car-info:hover {
+            background-color: #f0f0f0;
         }
 
-        input[type="submit"] {
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            font-size: 1.1em;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-        input[type="submit"]:active {
-            background-color: #004085;
-        }
-
-        .form-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            position: absolute;
-            top: 50%;
-            left: 10px;
-            transform: translateY(-50%);
-            transition: all 0.3s ease;
-            color: #999;
-        }
-
-        .form-group select:focus + label,
-        .form-group select:not(:placeholder-shown) + label,
-        .form-group input:focus + label,
-        .form-group input:not(:placeholder-shown) + label {
-            top: -10px;
-            left: 10px;
-            background-color: #fff;
-            padding: 0 5px;
-            font-size: 0.9em;
+        .car-info h3 {
+            margin: 0;
             color: #007bff;
         }
 
-        .form-group select:not(:placeholder-shown),
-        .form-group input:not(:placeholder-shown) {
-            padding-top: 20px;
-        }
-
-        .flashes {
-            text-align: center;
-            margin: 10px 0;
-        }
-
-        .flashes li {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border-radius: 5px;
-            margin: 5px;
+        .car-info .price {
             font-weight: bold;
+            margin-left: auto;
+            margin-right: 10px;
+            padding: 5px 5px;
+            background-color: #deef6d;
+            color: #1d1d1d;
+            border-radius: 28px;
         }
 
-        .flashes .success {
-            background-color: #d4edda;
-            color: #155724;
+        .car-info button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: background-color 0.3s ease;
         }
 
-        .flashes .error {
-            background-color: #f8d7da;
-            color: #721c24;
+        .car-info button:hover {
+            background-color: #0056b3;
+        }
+
+        .dropdown {
+            cursor: pointer;
+            color: #007bff;
         }
     </style>
 </head>
 <body>
-    <h1>Select Your Car</h1>
-    <form method="post">
-        <div class="form-group">
-            <select id="car_name" name="car_name" required>
-                <option value="" disabled selected>Select a car</option>
-                {% for car in cars %}
-                <option value="{{ car['brand'] }} {{ car['model'] }}">{{ car['brand'] }} {{ car['model'] }}</option>
-                {% endfor %}
-            </select>
-            <label for="car_name">Select Car:</label>
+    <div class="container">
+        <h1>Available Cars for Rent</h1>
+        <div class="category">
+            <h2>Hatchback</h2>
+            <button class="dropdown" onclick="toggleDropdown('hatchback')">Choose</button>
+            <div id="hatchback" class="subcategory">
+                <div class="car-info">
+                    <h3>i20 Hyundai</h3>
+                    <span class="price">Price: 150 rupees/hr</span>
+                    <button onclick="location.href='{{ url_for('payment', car_id=1) }}'">Rent</button>
+                </div>
+                <div class="car-info">
+                    <h3>Sonet Kia</h3>
+                    <span class="price">Price: 180 rupees/hr</span>
+                    <button onclick="location.href='{{ url_for('payment', car_id=2) }}'">Rent</button>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <input type="number" id="rental_hours" name="rental_hours" required placeholder=" ">
-            <label for="rental_hours">Rental Hours:</label>
-        </div>
-        <input type="submit" value="Next">
-    </form>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    <li class="{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+        <!-- Add more categories and cars here -->
+    </div>
+    <script>
+        function toggleDropdown(subcategoryId) {
+            const subcategory = document.getElementById(subcategoryId);
+            if (subcategory.style.display === 'none') {
+                subcategory.style.display = 'block';
+            } else {
+                subcategory.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
